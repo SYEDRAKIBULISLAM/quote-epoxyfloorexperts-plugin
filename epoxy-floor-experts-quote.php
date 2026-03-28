@@ -20,7 +20,8 @@ define( 'EFEX_TEXT_DOMAIN', 'epoxy-floor-experts-quote' );
  * - If EFEX_LEADCONDUIT_WEBHOOK_URL is empty, leads will be stored but not POSTed externally.
  */
 if ( ! defined( 'EFEX_LEADCONDUIT_WEBHOOK_URL' ) ) {
-	define( 'EFEX_LEADCONDUIT_WEBHOOK_URL', '' );
+	// Default LeadConduit Flow Source submit URL (override via WP Admin page or by defining EFEX_LEADCONDUIT_WEBHOOK_URL).
+	define( 'EFEX_LEADCONDUIT_WEBHOOK_URL', 'https://app.leadconduit.com/flows/684198bbf6391f0c24db713a/sources/69c576c08ff1da35286036f0/submit' );
 }
 if ( ! defined( 'EFEX_LEADCONDUIT_PRODUCT_LABEL' ) ) {
 	define( 'EFEX_LEADCONDUIT_PRODUCT_LABEL', 'Epoxy Floor Experts' );
@@ -62,22 +63,30 @@ function efex_epoxy_quote_markup() {
 				<input type="hidden" name="efex_endflow" class="efex-endflow-flag" value="">
 				<input type="hidden" name="efex_endflow_reason" class="efex-endflow-reason" value="">
 
+				<div class="arc-step-progress" hidden>
+					<ol class="arc-step-progress-list" role="list" aria-label="<?php echo esc_attr__( 'Form progress', EFEX_TEXT_DOMAIN ); ?>"></ol>
+				</div>
+
 				<!-- Step 1: ZIP -->
 				<div class="arc-step arc-step-1 active" data-step="1">
-					<div class="arc-step1-header"><?php echo esc_html__( 'Enter Zip Code', EFEX_TEXT_DOMAIN ); ?></div>
+					<div class="arc-step1-header">Get your <span>Free Estimate Today</span><?php //echo esc_html__( 'Get your <span>Free Estimate Today</span>', EFEX_TEXT_DOMAIN ); ?></div>
 					<div class="arc-step-icon-wrap">
-						<img src="<?php echo esc_url( $img_url . 'marker.png' ); ?>" alt="" class="arc-step-icon" aria-hidden="true">
+						<img src="<?php echo esc_url( $img_url . 'search.png' ); ?>" alt="" class="arc-step-icon" aria-hidden="true">
 					</div>
+					<div class="zip-heading">
+						<h4>What is your ZIP Code?</h4>
+					</div>
+				
 					<div class="arc-input-wrap arc-zip-wrap">
 						<div class="arc-zip-input-group">
 							<div class="arc-zip-addon">
-								<img src="<?php echo esc_url( $img_url . 'mark.png' ); ?>" alt="" class="arc-zip-pin" aria-hidden="true">
+								<img src="<?php echo esc_url( $img_url . 'location.png' ); ?>" alt="" class="arc-zip-pin" aria-hidden="true">
 							</div>
 							<input
 								type="text"
 								class="arc-input arc-zip"
 								name="zip_code"
-								placeholder="<?php echo esc_attr__( 'What is your ZIP Code?', EFEX_TEXT_DOMAIN ); ?>"
+								placeholder="<?php echo esc_attr__( 'ZIP Code?', EFEX_TEXT_DOMAIN ); ?>"
 								maxlength="5"
 								pattern="[0-9]*"
 								inputmode="numeric"
@@ -106,10 +115,6 @@ function efex_epoxy_quote_markup() {
 							<span class="arc-radio-label"><?php echo esc_html__( 'I rent this home', EFEX_TEXT_DOMAIN ); ?></span>
 						</label>
 						<label class="arc-radio-wrap">
-							<input type="radio" name="situation" value="rental_owner">
-							<span class="arc-radio-label"><?php echo esc_html__( 'This is a rental property that I own', EFEX_TEXT_DOMAIN ); ?></span>
-						</label>
-						<label class="arc-radio-wrap">
 							<input type="radio" name="situation" value="commercial_owner">
 							<span class="arc-radio-label"><?php echo esc_html__( 'This is for a commercial business I own', EFEX_TEXT_DOMAIN ); ?></span>
 						</label>
@@ -123,7 +128,7 @@ function efex_epoxy_quote_markup() {
 						<img src="<?php echo esc_url( $img_url . 'floor.png' ); ?>" alt="" class="arc-step-icon" aria-hidden="true">
 					</div>
 					<h2 class="arc-step-title"><?php echo esc_html__( 'Where are you looking to have epoxy flooring installed?', EFEX_TEXT_DOMAIN ); ?></h2>
-					<p class="arc-step-subtitle"><?php echo esc_html__( "Select the area you'd like to have epoxy flooring installed.", EFEX_TEXT_DOMAIN ); ?></p>
+					<p class="arc-step-subtitle"><?php echo esc_html__( "Select the area(s) you'd like to have epoxy flooring installed.", EFEX_TEXT_DOMAIN ); ?></p>
 					<div class="arc-options arc-options-checkboxes">
 						<label class="arc-radio-wrap">
 							<input type="checkbox" name="installation_area[]" value="Garage">
@@ -219,7 +224,7 @@ function efex_epoxy_quote_markup() {
 						<label class="arc-consent-label">
 							<input type="checkbox" name="consent" value="1" id="efex-consent">
 							<span class="arc-consent-text">
-								<?php echo esc_html__( 'Consent: By checking this box, I agree to receive marketing calls, AI follow-up calls, and text messages from Epoxy Floor Experts at the number you provided, including through automated technology.', EFEX_TEXT_DOMAIN ); ?>
+								<?php echo esc_html__( 'By checking this box, I agree to receive marketing calls, AI follow-up calls, and text messages from Epoxy Floor Experts at the number you provided, including through automated technology.', EFEX_TEXT_DOMAIN ); ?>
 							</span>
 						</label>
 					</div>
@@ -228,7 +233,7 @@ function efex_epoxy_quote_markup() {
 
 				<div class="efex-endflow-message" aria-live="polite" style="display:none;">
 					<p class="efex-endflow-out-of-area">
-						<?php echo esc_html__( 'Thank you for your interest! At this time, we do not service your area.', EFEX_TEXT_DOMAIN ); ?>
+						<?php echo esc_html__( 'Unfortunately, we do not serve in your area.', EFEX_TEXT_DOMAIN ); ?>
 					</p>
 					<p class="efex-endflow-renter">
 						<?php echo esc_html__( 'We only provide services for property owners.', EFEX_TEXT_DOMAIN ); ?>
@@ -236,7 +241,7 @@ function efex_epoxy_quote_markup() {
 				</div>
 
 				<div class="arc-nav">
-					<button type="button" class="arc-btn arc-btn-back"><?php echo esc_html__( 'Back ←', EFEX_TEXT_DOMAIN ); ?></button>
+					<button type="button" class="arc-btn arc-btn-back"><?php echo esc_html__( '← Back', EFEX_TEXT_DOMAIN ); ?></button>
 					<button type="button" class="arc-btn arc-btn-next"><?php echo esc_html__( 'Next →', EFEX_TEXT_DOMAIN ); ?></button>
 					<button type="submit" class="arc-btn arc-btn-submit" name="efex_epoxy_quote_submit"><?php echo esc_html__( 'Get My Free Estimate', EFEX_TEXT_DOMAIN ); ?></button>
 				</div>

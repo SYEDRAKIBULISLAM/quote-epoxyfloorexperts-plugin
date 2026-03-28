@@ -136,7 +136,7 @@
 			$('.e-con-inner').css('padding', '');
 
 			$(".elementor-element-6ce7684").css("display", "");
-			$(".elementor-element-1af20b3").css({"padding": "", "min-height": "650px"});
+			$(".elementor-element-1af20b3").css({"padding": "", "min-height": "680px"});
 			$(".elementor-element-888fd35").css("display", "");
 			$(".elementor-element-f7b282a").css("display", "");
 			$(".elementor-element-3344556").css("display", "");
@@ -197,9 +197,9 @@
 					display: 'flex',
 					flexDirection: 'column',
 					alignItems: 'center',
-					overflowY: 'visible',
-					paddingTop: '40px',
-					paddingBottom: '40px',
+					overflowY: 'scroll',
+					paddingTop: 'unset',
+					paddingBottom: 'unset',
 					borderRadius: 'unset',
 				});
 				$elementorElement.children().css({
@@ -213,12 +213,64 @@
 		}
 	}
 
+	/**
+	 * Progress bar: hidden on step 1 (ZIP); from Situation (step 2) onward shows wizard steps 1…N.
+	 * Connectors between circles use flex-grow so the row matches full content width.
+	 */
+	function updateStepProgress($form, stepNumber) {
+		const $bar = $form.find('.arc-step-progress');
+		const $list = $form.find('.arc-step-progress-list');
+		const order = getStepsInOrder($form);
+		const idx = order.indexOf(stepNumber);
+		if (idx < 0) {
+			$bar.prop('hidden', true);
+			return;
+		}
+		const wizardIndex = idx + 1;
+		const total = order.length;
+
+		if (stepNumber < 2) {
+			$bar.prop('hidden', true);
+			return;
+		}
+
+		$bar.prop('hidden', false);
+		let html = '';
+		for (let w = 1; w <= total; w++) {
+			let state = 'upcoming';
+			if (w < wizardIndex) {
+				state = 'complete';
+			} else if (w === wizardIndex) {
+				state = 'active';
+			}
+			const currentAttr = w === wizardIndex ? ' aria-current="step"' : '';
+			html +=
+				'<li class="arc-step-progress-item arc-step-progress-item--' +
+				state +
+				'"' +
+				currentAttr +
+				'><span class="arc-step-progress-num">' +
+				w +
+				'</span></li>';
+			if (w < total) {
+				const segState = w < wizardIndex ? 'complete' : 'upcoming';
+				html +=
+					'<li class="arc-step-progress-connector arc-step-progress-connector--' +
+					segState +
+					'" role="presentation" aria-hidden="true"></li>';
+			}
+		}
+		$list.html(html);
+	}
+
 	function showStep($form, stepNumber) {
 		$form.find('.arc-step').removeClass('active');
 		$form.find('.arc-step-' + stepNumber).addClass('active');
 		hideArcErrors($form);
 
 		$form.find('.efex-endflow-message').hide();
+
+		updateStepProgress($form, stepNumber);
 
 		toggleElementorPositioning($form, stepNumber);
 
@@ -300,7 +352,8 @@
 				}
 
 				if (!isZipInService(zip)) {
-					autoSubmitEndflow($form, 'out_of_area');
+					const msg = config.outOfAreaText || 'Thank you for your interest! At this time, we do not service your area.';
+					$form.find('.arc-zip-error').text(msg).show();
 					return;
 				}
 
@@ -323,7 +376,8 @@
 						return;
 					}
 					if (situation === 'renter') {
-						autoSubmitEndflow($form, 'renter');
+						const msg = config.renterText || 'We only provide services for property owners.';
+						$form.find('.arc-step2-error').text(msg).show();
 						return;
 					}
 					if (situation === commercialValue) {
