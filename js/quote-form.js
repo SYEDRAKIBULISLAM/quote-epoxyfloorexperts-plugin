@@ -136,7 +136,7 @@
 			$('.e-con-inner').css('padding', '');
 
 			$(".elementor-element-6ce7684").css("display", "");
-			$(".elementor-element-1af20b3").css({"padding": "", "min-height": "680px"});
+			$(".elementor-element-1af20b3").css({"padding": "", "min-height": "720px"});
 			$(".elementor-element-888fd35").css("display", "");
 			$(".elementor-element-f7b282a").css("display", "");
 			$(".elementor-element-3344556").css("display", "");
