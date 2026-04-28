@@ -4,7 +4,6 @@
 	const config = typeof efexQuoteForm !== 'undefined' ? efexQuoteForm : {};
 	const validZips = Array.isArray(config.validZipCodes) ? config.validZipCodes : [];
 	const serviceAreaEnforced = validZips.length > 0;
-	const commercialValue = config.commercialValue || 'commercial_owner';
 	/** Elementor container widget that hosts this form (shortcode section). */
 	const EFEX_ELEMENTOR_WIDGET_ID = '6e7257f';
 
@@ -19,19 +18,8 @@
 		return validZips.indexOf(normZip(zip)) !== -1;
 	}
 
-	function getSituation($form) {
-		const $checked = $form.find('input[name="situation"]:checked');
-		return $checked.length ? $checked.val() : '';
-	}
-
-	/**
-	 * Commercial owners skip steps 3–4 (installation + timeframe).
-	 */
-	function getStepsInOrder($form) {
-		if (getSituation($form) === commercialValue) {
-			return [1, 2, 5];
-		}
-		return [1, 2, 3, 4, 5];
+	function getStepsInOrder() {
+		return [1, 2, 3];
 	}
 
 	function getCurrentStepNumber($form) {
@@ -42,7 +30,7 @@
 	function hideArcErrors($form) {
 		$form
 			.find(
-				'.arc-zip-error, .arc-step2-error, .arc-step3-error, .arc-step4-error, .arc-contact-error'
+				'.arc-zip-error, .arc-step2-error, .arc-contact-error'
 			)
 			.hide();
 	}
@@ -214,13 +202,13 @@
 	}
 
 	/**
-	 * Progress bar: hidden on step 1 (ZIP); from Situation (step 2) onward shows wizard steps 1…N.
+	 * Progress bar: hidden on step 1 (ZIP); from step 2 onward shows wizard steps 1…N.
 	 * Connectors between circles use flex-grow so the row matches full content width.
 	 */
 	function updateStepProgress($form, stepNumber) {
 		const $bar = $form.find('.arc-step-progress');
 		const $list = $form.find('.arc-step-progress-list');
-		const order = getStepsInOrder($form);
+		const order = getStepsInOrder();
 		const idx = order.indexOf(stepNumber);
 		if (idx < 0) {
 			$bar.prop('hidden', true);
@@ -283,7 +271,7 @@
 			$form.find('.arc-btn-get-started').hide();
 			$form.find('.arc-btn-back').show();
 
-			const order = getStepsInOrder($form);
+			const order = getStepsInOrder();
 			const last = order[order.length - 1];
 			if (stepNumber === last) {
 				$form.find('.arc-btn-submit').show();
@@ -299,17 +287,12 @@
 
 		const $msg = $form.find('.efex-endflow-message');
 		const outText = config.outOfAreaText || '';
-		const renterText = config.renterText || '';
 		if (outText) {
 			$msg.find('.efex-endflow-out-of-area').text(outText);
-		}
-		if (renterText) {
-			$msg.find('.efex-endflow-renter').text(renterText);
 		}
 
 		$msg.show();
 		$msg.find('.efex-endflow-out-of-area').toggle(reason === 'out_of_area');
-		$msg.find('.efex-endflow-renter').toggle(reason === 'renter');
 	}
 
 	function autoSubmitEndflow($form, reason) {
@@ -364,54 +347,26 @@
 				$form.find('.arc-zip-error').hide();
 			});
 
-			// Next (steps 2–4)
+			// Next (step 2 only)
 			$form.on('click', '.arc-btn-next', function () {
 				const current = getCurrentStepNumber($form);
 				hideArcErrors($form);
 
 				if (current === 2) {
-					const situation = getSituation($form);
-					if (!situation) {
+					const $checks = $form.find('input[name^="installation_area"]:checked');
+					if (!$checks.length) {
 						$form.find('.arc-step2-error').show();
-						return;
-					}
-					if (situation === 'renter') {
-						const msg = config.renterText || 'We only provide services for property owners.';
-						$form.find('.arc-step2-error').text(msg).show();
-						return;
-					}
-					if (situation === commercialValue) {
-						showStep($form, 5);
 						return;
 					}
 					showStep($form, 3);
 					return;
-				}
-
-				if (current === 3) {
-					const $checks = $form.find('input[name^="installation_area"]:checked');
-					if (!$checks.length) {
-						$form.find('.arc-step3-error').show();
-						return;
-					}
-					showStep($form, 4);
-					return;
-				}
-
-				if (current === 4) {
-					const $tf = $form.find('input[name="timeframe"]:checked');
-					if (!$tf.length) {
-						$form.find('.arc-step4-error').show();
-						return;
-					}
-					showStep($form, 5);
 				}
 			});
 
 			// Back
 			$form.on('click', '.arc-btn-back', function () {
 				const current = getCurrentStepNumber($form);
-				const order = getStepsInOrder($form);
+				const order = getStepsInOrder();
 				const idx = order.indexOf(current);
 				if (idx <= 0) {
 					return;
@@ -421,14 +376,8 @@
 			});
 
 			// Clear errors when options change
-			$form.on('change', 'input[name="situation"]', function () {
-				$form.find('.arc-step2-error').hide();
-			});
 			$form.on('change', 'input[name^="installation_area"]', function () {
-				$form.find('.arc-step3-error').hide();
-			});
-			$form.on('change', 'input[name="timeframe"]', function () {
-				$form.find('.arc-step4-error').hide();
+				$form.find('.arc-step2-error').hide();
 			});
 
 			// Submit — contact validation unless end-flow early submit

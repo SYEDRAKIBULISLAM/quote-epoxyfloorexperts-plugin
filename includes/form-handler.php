@@ -26,8 +26,7 @@ function efex_epoxy_quote_handle_submit() {
 	$table = efex_leads_table_name();
 	efex_maybe_create_leads_table( $table );
 
-	$zip       = isset( $_POST['zip_code'] ) ? sanitize_text_field( wp_unslash( $_POST['zip_code'] ) ) : '';
-	$situation = isset( $_POST['situation'] ) ? sanitize_text_field( wp_unslash( $_POST['situation'] ) ) : '';
+	$zip = isset( $_POST['zip_code'] ) ? sanitize_text_field( wp_unslash( $_POST['zip_code'] ) ) : '';
 
 	$endflow_reason = isset( $_POST['efex_endflow_reason'] ) ? sanitize_text_field( wp_unslash( $_POST['efex_endflow_reason'] ) ) : '';
 
@@ -42,7 +41,8 @@ function efex_epoxy_quote_handle_submit() {
 	}
 
 	$installation_area = ! empty( $installation_areas ) ? implode( ', ', $installation_areas ) : null;
-	$timeframe          = isset( $_POST['timeframe'] ) ? sanitize_text_field( wp_unslash( $_POST['timeframe'] ) ) : null;
+	$situation         = null;
+	$timeframe         = null;
 
 	$first_name = isset( $_POST['first_name'] ) ? sanitize_text_field( wp_unslash( $_POST['first_name'] ) ) : '';
 	$last_name  = isset( $_POST['last_name'] ) ? sanitize_text_field( wp_unslash( $_POST['last_name'] ) ) : '';
@@ -60,28 +60,15 @@ function efex_epoxy_quote_handle_submit() {
 	}
 
 	// Branching rules (server-side):
-	// - ZIP outside service area => end flow / disqualify
-	// - renter => disqualify
+	// - ZIP outside service area => end flow / disqualify.
 	$disqualify_reason = '';
 	if ( ! $zip_in_service ) {
 		$disqualify_reason = 'out_of_area';
-	} elseif ( 'renter' === $situation ) {
-		$disqualify_reason = 'renter';
 	}
-
-	$situation_labels = array(
-		'homeowner'        => 'I am the homeowner',
-		'renter'           => 'I rent this home',
-		'rental_owner'     => 'This is a rental property that I own',
-		'commercial_owner' => 'This is for a commercial business I own',
-	);
-	$situation_label = isset( $situation_labels[ $situation ] ) ? $situation_labels[ $situation ] : $situation;
 
 	$notes = "Epoxy Quote\n";
 	$notes .= 'ZIP: ' . ( $zip ? $zip : 'N/A' ) . "\n";
-	$notes .= 'Situation: ' . ( $situation_label ? $situation_label : 'N/A' ) . "\n";
 	$notes .= 'Installation Area: ' . ( $installation_area ? $installation_area : 'N/A' ) . "\n";
-	$notes .= 'Timeframe: ' . ( $timeframe ? $timeframe : 'N/A' ) . "\n";
 
 	if ( $disqualify_reason ) {
 		$notes .= 'Disqualified Reason: ' . $disqualify_reason . "\n";
@@ -95,8 +82,7 @@ function efex_epoxy_quote_handle_submit() {
 	$crm_success    = false;
 
 	// Validate required fields only when not disqualified.
-	$is_commercial = ( 'commercial_owner' === $situation );
-	$is_qualified  = empty( $disqualify_reason );
+	$is_qualified = empty( $disqualify_reason );
 
 	if ( $is_qualified ) {
 		// Required contact + consent.
@@ -108,16 +94,12 @@ function efex_epoxy_quote_handle_submit() {
 			$notes            .= "Disqualified Reason: missing_contact\n";
 		}
 
-		// For non-commercial leads, Step 3 and Step 4 are required.
-		if ( $is_commercial ) {
-			// Skip area/timeframe validations.
-		} else {
-			if ( empty( $installation_area ) || ! $timeframe ) {
-				$is_crm_allowed   = false;
-				$is_qualified     = false;
-				$disqualify_reason = $disqualify_reason ? $disqualify_reason : 'missing_steps';
-				$notes            .= "Disqualified Reason: missing_steps\n";
-			}
+		// Installation area remains required.
+		if ( empty( $installation_area ) ) {
+			$is_crm_allowed   = false;
+			$is_qualified     = false;
+			$disqualify_reason = $disqualify_reason ? $disqualify_reason : 'missing_steps';
+			$notes            .= "Disqualified Reason: missing_steps\n";
 		}
 	}
 

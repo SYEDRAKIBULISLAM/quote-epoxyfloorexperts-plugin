@@ -98,32 +98,8 @@ function efex_epoxy_quote_markup() {
 					<button type="button" class="arc-btn arc-btn-primary arc-btn-get-started"><?php echo esc_html__( 'Get Started', EFEX_TEXT_DOMAIN ); ?></button>
 				</div>
 
-				<!-- Step 2: Situation -->
+				<!-- Step 2: Installation area -->
 				<div class="arc-step arc-step-2" data-step="2">
-					<div class="arc-step-icon-wrap arc-icon-circle">
-						<img src="<?php echo esc_url( $img_url . 'home.png' ); ?>" alt="" class="arc-step-icon" aria-hidden="true">
-					</div>
-					<h2 class="arc-step-title"><?php echo esc_html__( 'Which best describes your situation?', EFEX_TEXT_DOMAIN ); ?></h2>
-					<p class="arc-step-subtitle"><?php echo esc_html__( 'Let us know a little about your property.', EFEX_TEXT_DOMAIN ); ?></p>
-					<div class="arc-options">
-						<label class="arc-radio-wrap">
-							<input type="radio" name="situation" value="homeowner">
-							<span class="arc-radio-label"><?php echo esc_html__( 'I am the homeowner', EFEX_TEXT_DOMAIN ); ?></span>
-						</label>
-						<label class="arc-radio-wrap">
-							<input type="radio" name="situation" value="renter">
-							<span class="arc-radio-label"><?php echo esc_html__( 'I rent this home', EFEX_TEXT_DOMAIN ); ?></span>
-						</label>
-						<label class="arc-radio-wrap">
-							<input type="radio" name="situation" value="commercial_owner">
-							<span class="arc-radio-label"><?php echo esc_html__( 'This is for a commercial business I own', EFEX_TEXT_DOMAIN ); ?></span>
-						</label>
-					</div>
-					<p class="arc-error arc-step2-error" role="alert"><?php echo esc_html__( 'Please select an option to continue.', EFEX_TEXT_DOMAIN ); ?></p>
-				</div>
-
-				<!-- Step 3: Installation area -->
-				<div class="arc-step arc-step-3" data-step="3">
 					<div class="arc-step-icon-wrap arc-icon-circle">
 						<img src="<?php echo esc_url( $img_url . 'floor.png' ); ?>" alt="" class="arc-step-icon" aria-hidden="true">
 					</div>
@@ -159,39 +135,11 @@ function efex_epoxy_quote_markup() {
 							<span class="arc-radio-label"><?php echo esc_html__( 'Other', EFEX_TEXT_DOMAIN ); ?></span>
 						</label>
 					</div>
-					<p class="arc-error arc-step3-error" role="alert"><?php echo esc_html__( 'Please select at least one installation area.', EFEX_TEXT_DOMAIN ); ?></p>
+					<p class="arc-error arc-step2-error" role="alert"><?php echo esc_html__( 'Please select at least one installation area.', EFEX_TEXT_DOMAIN ); ?></p>
 				</div>
 
-				<!-- Step 4: Timeframe -->
-				<div class="arc-step arc-step-4" data-step="4">
-					<div class="arc-step-icon-wrap arc-icon-circle">
-						<img src="<?php echo esc_url( $img_url . 'calendar.png' ); ?>" alt="" class="arc-step-icon" aria-hidden="true">
-					</div>
-					<h2 class="arc-step-title"><?php echo esc_html__( 'When are you looking to start your project?', EFEX_TEXT_DOMAIN ); ?></h2>
-					<p class="arc-step-subtitle"><?php echo esc_html__( 'Your timeline helps us prioritize your project.', EFEX_TEXT_DOMAIN ); ?></p>
-					<div class="arc-options">
-						<label class="arc-radio-wrap">
-							<input type="radio" name="timeframe" value="As Soon As Possible">
-							<span class="arc-radio-label"><?php echo esc_html__( 'As Soon As Possible', EFEX_TEXT_DOMAIN ); ?></span>
-						</label>
-						<label class="arc-radio-wrap">
-							<input type="radio" name="timeframe" value="Within 1 month">
-							<span class="arc-radio-label"><?php echo esc_html__( 'Within 1 month', EFEX_TEXT_DOMAIN ); ?></span>
-						</label>
-						<label class="arc-radio-wrap">
-							<input type="radio" name="timeframe" value="1-3 Months">
-							<span class="arc-radio-label"><?php echo esc_html__( '1-3 Months', EFEX_TEXT_DOMAIN ); ?></span>
-						</label>
-						<label class="arc-radio-wrap">
-							<input type="radio" name="timeframe" value="Just researching">
-							<span class="arc-radio-label"><?php echo esc_html__( 'Just researching', EFEX_TEXT_DOMAIN ); ?></span>
-						</label>
-					</div>
-					<p class="arc-error arc-step4-error" role="alert"><?php echo esc_html__( 'Please select a timeframe option to continue.', EFEX_TEXT_DOMAIN ); ?></p>
-				</div>
-
-				<!-- Step 5: Contact -->
-				<div class="arc-step arc-step-5" data-step="5">
+				<!-- Step 3: Contact -->
+				<div class="arc-step arc-step-3" data-step="3">
 					<div class="arc-step-icon-wrap arc-icon-circle">
 						<img src="<?php echo esc_url( $img_url . 'user.png' ); ?>" alt="" class="arc-step-icon" aria-hidden="true">
 					</div>
@@ -224,7 +172,7 @@ function efex_epoxy_quote_markup() {
 						<label class="arc-consent-label">
 							<input type="checkbox" name="consent" value="1" id="efex-consent">
 							<span class="arc-consent-text">
-								<?php echo esc_html__( 'By checking this box, I agree to receive marketing calls, AI follow-up calls, and text messages from Epoxy Floor Experts at the number you provided, including through automated technology.', EFEX_TEXT_DOMAIN ); ?>
+							Yes, I agree to be contacted by call or text (including automated) from Epoxy Floor Experts to schedule my appointment, and I accept the <a href="/terms-of-services" target="_blank">Terms</a> and <a href="/privacy-policy" target="_blank">Privacy Policy</a>. Consent is not a condition of purchase.
 							</span>
 						</label>
 					</div>
@@ -234,9 +182,6 @@ function efex_epoxy_quote_markup() {
 				<div class="efex-endflow-message" aria-live="polite" style="display:none;">
 					<p class="efex-endflow-out-of-area">
 						<?php echo esc_html__( 'Unfortunately, we do not serve in your area.', EFEX_TEXT_DOMAIN ); ?>
-					</p>
-					<p class="efex-endflow-renter">
-						<?php echo esc_html__( 'We only provide services for property owners.', EFEX_TEXT_DOMAIN ); ?>
 					</p>
 				</div>
 
