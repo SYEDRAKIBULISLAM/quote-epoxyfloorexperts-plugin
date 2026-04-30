@@ -21,7 +21,7 @@ define( 'EFEX_TEXT_DOMAIN', 'epoxy-floor-experts-quote' );
  */
 if ( ! defined( 'EFEX_LEADCONDUIT_WEBHOOK_URL' ) ) {
 	// Default LeadConduit Flow Source submit URL (override via WP Admin page or by defining EFEX_LEADCONDUIT_WEBHOOK_URL).
-	define( 'EFEX_LEADCONDUIT_WEBHOOK_URL', 'https://app.leadconduit.com/flows/684198bbf6391f0c24db713a/sources/69c576c08ff1da35286036f0/submit' );
+	define( 'EFEX_LEADCONDUIT_WEBHOOK_URL', 'https://are.opta.io/ca/submit' );
 }
 if ( ! defined( 'EFEX_LEADCONDUIT_PRODUCT_LABEL' ) ) {
 	define( 'EFEX_LEADCONDUIT_PRODUCT_LABEL', 'Epoxy Floor Experts' );

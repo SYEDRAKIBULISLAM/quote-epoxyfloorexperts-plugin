@@ -116,23 +116,32 @@ function efex_epoxy_quote_handle_submit() {
 		}
 		$webhook_url = apply_filters( 'efex_leadconduit_webhook_url', $webhook_url );
 		$product      = apply_filters( 'efex_leadconduit_product_label', EFEX_LEADCONDUIT_PRODUCT_LABEL );
-
 		if ( $webhook_url ) {
+			
 			$postData = array(
-				'first_name'           => $first_name,
-				'last_name'            => $last_name,
-				'phone_1'              => $formatted_phone,
-				'email'                => $email,
-				'product'              => $product,
-				'comments'              => $notes,
-				'postal_code'          => $zip,
-				'trustedform_cert_url' => $tf_cert_url,
+				'compid' => 'LBNFI',
+				'pubid' => 'WP2HBDSB',
+				'campid' => 'XOVYSM',
+				'auth' => '87D80C6A-EBAE-4BC8-A1B3-3144440FB5AF',
+				'first' => $first_name,
+				'last' => $last_name,
+				'phone' => $formatted_phone,
+				'email' => $email,
+				'product' => $product,
+				'notes'  => $notes,
+				'zip' => $zip,
+				"price" => "0.0",
+				'tf' => $tf_cert_url
 			);
 
 			$response = wp_remote_post(
 				$webhook_url,
 				array(
-					'body'    => $postData,
+					'headers' => array(
+						'Content-Type' => 'application/json; charset=utf-8',
+						'Accept'       => 'application/json',
+					),
+					'body'    => wp_json_encode( $postData ),
 					'timeout' => 15,
 				)
 			);
