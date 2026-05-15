@@ -39,7 +39,7 @@ function efex_enqueue_quote_form_assets() {
 
 	wp_enqueue_script(
 		'efex-quote-form-script',
-		EFEX_PLUGIN_URL . 'js/quote-form.js?v=2.5.0',
+		EFEX_PLUGIN_URL . 'js/quote-form.js?v=2.6.0',
 		array( 'jquery' ),
 		'1.0.2',
 		true

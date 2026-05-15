@@ -392,10 +392,9 @@
 				const lastName = ($form.find('input[name="last_name"]').val() || '').trim();
 				const email = ($form.find('input[name="email"]').val() || '').trim();
 				const phone = ($form.find('input[name="phone"]').val() || '').trim();
-				const consent = $form.find('input[name="consent"]:checked').length > 0;
 
 				$form.find('.arc-contact-error').hide();
-				if (!firstName || !lastName || !email || !phone || !consent) {
+				if (!firstName || !lastName || !email || !phone) {
 					e.preventDefault();
 					$form.find('.arc-contact-error').show();
 					return false;

@@ -169,12 +169,10 @@ function efex_epoxy_quote_markup() {
 						</div>
 					</div>
 					<div class="arc-consent-wrap">
-						<label class="arc-consent-label">
-							<input type="checkbox" name="consent" value="1" id="efex-consent">
-							<span class="arc-consent-text">
-							Yes, I agree to be contacted by call or text (including automated) from Epoxy Floor Experts to schedule my appointment, and I accept the <a href="/terms-of-services" target="_blank">Terms</a> and <a href="/privacy-policy" target="_blank">Privacy Policy</a>. Consent is not a condition of purchase.
-							</span>
-						</label>
+						<p class="arc-consent-text">
+							By submitting this form, you agree to receive calls and text messages (including automated and prerecorded messages) from Epoxy Floor Experts at the phone number provided regarding your inquiry and appointment scheduling. Consent is not a condition of purchase. Message and data rates may apply. You may reply STOP to opt out at any time. <a href="https://epoxyfloorexperts.com/terms-of-service/" target="_blank">Terms of Service</a> and <a href="https://epoxyfloorexperts.com/privacy-policy/" target="_blank">Privacy Policy</a> apply.
+						</p>
+						<input type="hidden" name="consent" value="1">
 					</div>
 					<p class="arc-error arc-contact-error" role="alert"><?php echo esc_html__( 'Please fill all required fields and accept the consent.', EFEX_TEXT_DOMAIN ); ?></p>
 				</div>

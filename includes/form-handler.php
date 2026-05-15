@@ -49,7 +49,7 @@ function efex_epoxy_quote_handle_submit() {
 	$email      = isset( $_POST['email'] ) ? sanitize_email( wp_unslash( $_POST['email'] ) ) : '';
 	$phone      = isset( $_POST['phone'] ) ? sanitize_text_field( wp_unslash( $_POST['phone'] ) ) : '';
 
-	$consented         = ! empty( $_POST['consent'] );
+	$consented         = true; // Consent is now implicit (checkbox removed, always agreed)
 	$tf_cert_url       = isset( $_POST['xxTrustedFormCertUrl'] ) ? esc_url_raw( wp_unslash( $_POST['xxTrustedFormCertUrl'] ) ) : null;
 	$tf_cert_url       = $tf_cert_url ? $tf_cert_url : null;
 
@@ -85,8 +85,8 @@ function efex_epoxy_quote_handle_submit() {
 	$is_qualified = empty( $disqualify_reason );
 
 	if ( $is_qualified ) {
-		// Required contact + consent.
-		if ( ! $first_name || ! $last_name || ! $email || ! $phone || ! $consented ) {
+		// Required contact fields (consent is implicit).
+		if ( ! $first_name || ! $last_name || ! $email || ! $phone ) {
 			// Treat as not qualified if missing required contact fields.
 			$is_crm_allowed   = false;
 			$disqualify_reason = $disqualify_reason ? $disqualify_reason : 'missing_contact';
@@ -127,7 +127,8 @@ function efex_epoxy_quote_handle_submit() {
 				'last' => $last_name,
 				'phone' => $formatted_phone,
 				'email' => $email,
-				'product' => $product,
+				'product' => "Epoxy",
+				"sender" => "quote.epoxyfloorexperts.com",
 				'notes'  => $notes,
 				'zip' => $zip,
 				"price" => "0.0",
