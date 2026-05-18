@@ -57,7 +57,7 @@ function efex_epoxy_quote_markup() {
 	?>
 	<div class="arc-calculator arc-roof-form">
 		<div class="arc-calculator-inner">
-			<form class="arc-roof-form-form arc-form" action="<?php echo esc_url( $action_url ); ?>" method="post" novalidate>
+			<form class="arc-roof-form-form arc-form" action="<?php echo esc_url( $action_url ); ?>" method="post">
 				<?php wp_nonce_field( 'efex_epoxy_quote_submit', 'efex_epoxy_quote_nonce' ); ?>
 
 				<input type="hidden" name="efex_endflow" class="efex-endflow-flag" value="">
@@ -148,29 +148,29 @@ function efex_epoxy_quote_markup() {
 					<div class="arc-form-row arc-form-row-half">
 						<div class="arc-field">
 							<label for="efex-first-name"><?php echo esc_html__( 'First Name', EFEX_TEXT_DOMAIN ); ?></label>
-							<input type="text" id="efex-first-name" name="first_name" placeholder="<?php echo esc_attr__( 'First Name', EFEX_TEXT_DOMAIN ); ?>">
+							<input type="text" id="efex-first-name" name="first_name" placeholder="<?php echo esc_attr__( 'First Name', EFEX_TEXT_DOMAIN ); ?>" required autocomplete="given-name">
 						</div>
 						<div class="arc-field">
 							<label for="efex-last-name"><?php echo esc_html__( 'Last Name', EFEX_TEXT_DOMAIN ); ?></label>
-							<input type="text" id="efex-last-name" name="last_name" placeholder="<?php echo esc_attr__( 'Last Name', EFEX_TEXT_DOMAIN ); ?>">
+							<input type="text" id="efex-last-name" name="last_name" placeholder="<?php echo esc_attr__( 'Last Name', EFEX_TEXT_DOMAIN ); ?>" required autocomplete="family-name">
 						</div>
 					</div>
 					<div class="arc-form-row">
 						<div class="arc-field">
 							<label for="efex-email"><?php echo esc_html__( 'Email', EFEX_TEXT_DOMAIN ); ?></label>
-							<input type="email" id="efex-email" name="email" placeholder="<?php echo esc_attr__( 'you@email.com', EFEX_TEXT_DOMAIN ); ?>">
+							<input type="email" id="efex-email" name="email" placeholder="<?php echo esc_attr__( 'you@email.com', EFEX_TEXT_DOMAIN ); ?>" required autocomplete="email">
 						</div>
 					</div>
 					<div class="arc-form-row">
 						<label for="efex-phone"><?php echo esc_html__( 'Phone', EFEX_TEXT_DOMAIN ); ?></label>
 						<div class="arc-field arc-phone-wrap">
 							<span class="arc-phone-prefix">+1</span>
-							<input type="tel" id="efex-phone" class="arc-phone-input" name="phone" placeholder="<?php echo esc_attr__( '(123) 456-7890', EFEX_TEXT_DOMAIN ); ?>">
+							<input type="tel" id="efex-phone" class="arc-phone-input" name="phone" placeholder="<?php echo esc_attr__( '(123) 456-7890', EFEX_TEXT_DOMAIN ); ?>" required autocomplete="tel">
 						</div>
 					</div>
 					<div class="arc-consent-wrap">
 						<p class="arc-consent-text">
-							By submitting this form, you agree to receive calls and text messages (including automated and prerecorded messages) from Epoxy Floor Experts at the phone number provided regarding your inquiry and appointment scheduling. Consent is not a condition of purchase. Message and data rates may apply. You may reply STOP to opt out at any time. <a href="https://epoxyfloorexperts.com/terms-of-service/" target="_blank">Terms of Service</a> and <a href="https://epoxyfloorexperts.com/privacy-policy/" target="_blank">Privacy Policy</a> apply.
+						By submitting this form, you agree to receive calls and texts, including automated and prerecorded messages, from Epoxy Floor Experts at the number provided regarding your inquiry and appointments. Consent is not a condition of purchase. Msg & data rates may apply. Reply STOP to opt out. <a href="https://epoxyfloorexperts.com/terms-of-service/" target="_blank">Terms</a> & <a href="https://epoxyfloorexperts.com/privacy-policy" target="_blank">Privacy Policy</a> apply.
 						</p>
 						<input type="hidden" name="consent" value="1">
 					</div>
